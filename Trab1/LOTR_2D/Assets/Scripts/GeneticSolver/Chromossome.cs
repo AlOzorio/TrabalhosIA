@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using UnityEngine.Animations;
+//using UnityEngine.Animations;
 
 namespace GeneticSolver
 {
     public class Chromossome // = Indivíduo
     {
-        private List<Hobbit> Hobbits;
-        public List<Step> chromossome;
+        private List<Hobbit> Hobbits = new List<Hobbit>();
+        public List<Step> chromossome = new List<Step>();
 
         private System.Random Randomizer = new System.Random();
 

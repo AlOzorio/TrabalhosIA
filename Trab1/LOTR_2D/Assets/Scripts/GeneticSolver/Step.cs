@@ -9,7 +9,7 @@ namespace GeneticSolver
     {
         public char number; //{ get; set; } ?
         public int difficulty; //{ get; set; } ?
-        public List<Hobbit> chosenHobbits; //{ get; set; } ?
+        public List<Hobbit> chosenHobbits = new List<Hobbit>(); //{ get; set; } ?
         public float achievementTime; //{ get; set; } ?
 
         public Step(char number, int difficulty)

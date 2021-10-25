@@ -4,10 +4,10 @@ namespace GeneticSolver
 {
     public class Utils
     {
-        public static float FitnessFunction(Chromossome c)
+        public static double FitnessFunction(Chromossome c)
         {
-            float tempoTotal = 0;
-            float fitnessValue;
+            double tempoTotal = 0;
+            double fitnessValue;
             for (int i = 0; i < c.chromossome.Count; i++)
             {
                 tempoTotal += c.chromossome[i].achievementTime;

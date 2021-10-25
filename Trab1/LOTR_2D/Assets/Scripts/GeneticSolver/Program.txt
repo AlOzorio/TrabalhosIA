@@ -1,0 +1,16 @@
+﻿//Substituir por um arquivo CS para testar
+
+using System;
+using GeneticSolver;
+
+namespace Teste
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Chromossome c = new Chromossome();
+            Console.WriteLine(Utils.FitnessFunction(c));
+        }
+    }
+}
