@@ -5,9 +5,11 @@ using UnityEngine;
 public class Astar : MonoBehaviour
 {
     public Grid grid;
+    private int colorIndex;
     
-    private void Awake() 
+    private void Awake()
     {
+        colorIndex = 0;
         grid = GetComponent<Grid>();
         grid.GenerateGrid(grid.w, grid.h, grid.cellSize);
     }
@@ -93,8 +95,10 @@ public class Astar : MonoBehaviour
         
         for(int i = 0; i < fullPath.Count; i++)
         {
-            fullPath[i].mapTile.GetComponent<SpriteRenderer>().color = Color.red;
+            fullPath[i].mapTile.GetComponent<SpriteRenderer>().color = GetComponent<Types>().color[colorIndex];
         }
+
+        colorIndex++;
     }
 
     private int GetNodeDistance(GridNode origin, GridNode destiny)
