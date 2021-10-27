@@ -15,6 +15,9 @@ namespace GeneticSolver
 
         public static bool IsValidChromossome(Chromossome c)
         {
+            return !double.IsPositiveInfinity(c.totalAchievementTime);
+            
+            /*
             if (!double.IsPositiveInfinity(c.totalAchievementTime))
             {
                 int cont_Frodo = 0;
@@ -48,7 +51,7 @@ namespace GeneticSolver
                 if (cont_Frodo == 10 && cont_Merry == 10 && cont_Pippin == 10 & cont_Sam == 10)
                     return true;
             }
-            return false;
+            return false; */
         }
     }
 }

@@ -10,7 +10,7 @@ public class Program : MonoBehaviour
     //Variáveis de configuração do algoritmo genético
     int maxPopulationSize = 1000;
     int maxAllowedSurvivors = 10;
-    double fitnessThreshold = 0.01;
+    double fitnessThreshold = 0.0001;
     System.Random Randomizer = new System.Random();
 
     // Start is called before the first frame update
