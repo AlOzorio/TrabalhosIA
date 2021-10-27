@@ -9,6 +9,7 @@ public class GeneticSolverScript : MonoBehaviour
     public static Chromossome bestChromossome;
     private static System.Random Randomizer = new System.Random();
     public double bestFitness = 0;
+    public double bestTime;
     
     public void Solve()
     {
@@ -33,8 +34,9 @@ public class GeneticSolverScript : MonoBehaviour
             }
         }
         
+        bestTime = 1/bestFitness;
         Debug.Log("Fim");
-        Debug.Log("Melhor tempo: " + 1/bestFitness + " minutos");
+        Debug.Log("Melhor tempo: " + bestTime + " minutos");
         
         for (int i = 0; i < bestChromossome.Steps.Count(); i++)
         {  

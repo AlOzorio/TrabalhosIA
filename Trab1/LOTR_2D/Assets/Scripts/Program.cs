@@ -19,8 +19,7 @@ public class Program : MonoBehaviour
     public void GetTime()
     {
         gss.Solve();
-        double bestTime = 1/gss.bestFitness;
-        double totalTime = bestTime + (double)astar.travelTime;
+        double totalTime = gss.bestTime + (double)astar.travelTime;
         Debug.Log("Tempo total gasto na viagem: " + totalTime);
     }
 }
