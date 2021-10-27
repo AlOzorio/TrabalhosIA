@@ -104,6 +104,7 @@ public class GeneticSolverScript : MonoBehaviour
     //Selecionador dos melhores indivíduos
     private void SelectBestChromossomes()
     {
+        Survivors.Clear();
         Population = Population.OrderByDescending(c => Utils.FitnessFunction(c)).ToList();
         for (int i = 0; i < maxAllowedSurvivors; i++)
         {
@@ -172,7 +173,6 @@ public class GeneticSolverScript : MonoBehaviour
                     CompareBestChromossome(newChromossomeSon);
                 }
             }
-            Survivors.Clear();
             iterationNumber++;
         }
     }
