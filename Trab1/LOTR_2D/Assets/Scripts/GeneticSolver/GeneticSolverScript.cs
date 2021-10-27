@@ -14,23 +14,56 @@ public class GeneticSolverScript : MonoBehaviour
     private int maxPopulationSize;
     private int maxAllowedSurvivors;
     private System.Random Randomizer;
+    private string stopCondition;
+    private double fitnessThreshold;
+    private int maxIterations;
+    private int iterationNumber = 0;
 
 
-    public void Solve(int maxPopulationSize, int maxAllowedSurvivors, double fitnessThreshold, System.Random Randomizer)
+    public void Solve(int maxPopulationSize, int maxAllowedSurvivors, System.Random Randomizer, string stopCondition, double fitnessThreshold = 0, int maxIterations = 0)
     {
         this.maxPopulationSize = maxPopulationSize;
         this.maxAllowedSurvivors = maxAllowedSurvivors;
         this.Randomizer = Randomizer;
+        this.stopCondition = stopCondition;
+        this.fitnessThreshold = fitnessThreshold;
+        this.maxIterations = maxIterations;
 
         Debug.Log("Cálculo do melhor tempo para realizar as etapas:");
         GenerateFirstPopulation();
-        
-        while (bestFitness < fitnessThreshold)
+
+        if (stopCondition == "fitnessThreshold")
         {
-            SelectBestChromossomes();
-            CrossOver();
+            if (fitnessThreshold != 0)
+            {
+                while (bestFitness < fitnessThreshold)
+                {
+                    SelectBestChromossomes();
+                    CrossOver();
+                }
+            }
+            else
+            {
+                Debug.Log("ERRO - Defina um limiar para a função fitness");
+                System.Environment.Exit(1);
+            }
         }
-        
+        else if (stopCondition == "maxIterations")
+        {
+            if (maxIterations != 0)
+            {
+                while (iterationNumber < maxIterations)
+                {
+                    SelectBestChromossomes();
+                    CrossOver();
+                }
+            }
+            else
+            {
+                Debug.Log("ERRO - Defina um número máximo de iterações");
+                System.Environment.Exit(1);
+            }
+        }
         bestTime = Utils.ReverseFitnessToTime(bestFitness);
         Debug.Log("Fim");
         Debug.Log("Melhor tempo: " + bestTime + " minutos");
@@ -51,6 +84,7 @@ public class GeneticSolverScript : MonoBehaviour
                 Population.Add(c);
                 CompareBestChromossome(c);
             }
+            iterationNumber++;
         }
     }
 
@@ -139,6 +173,7 @@ public class GeneticSolverScript : MonoBehaviour
                 }
             }
             Survivors.Clear();
+            iterationNumber++;
         }
     }
 
