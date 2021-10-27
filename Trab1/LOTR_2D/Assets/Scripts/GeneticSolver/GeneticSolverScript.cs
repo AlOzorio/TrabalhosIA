@@ -18,9 +18,10 @@ public class GeneticSolverScript : MonoBehaviour
     private double fitnessThreshold;
     private int maxIterations;
     private int iterationNumber = 0;
+    private float mutationChance;
 
 
-    public void Solve(int maxPopulationSize, int maxAllowedSurvivors, System.Random Randomizer, string stopCondition, double fitnessThreshold = 0, int maxIterations = 0)
+    public void Solve(int maxPopulationSize, int maxAllowedSurvivors, System.Random Randomizer, string stopCondition, double fitnessThreshold = 0, int maxIterations = 0, float mutationChance = 0.05f)
     {
         this.maxPopulationSize = maxPopulationSize;
         this.maxAllowedSurvivors = maxAllowedSurvivors;
@@ -28,6 +29,7 @@ public class GeneticSolverScript : MonoBehaviour
         this.stopCondition = stopCondition;
         this.fitnessThreshold = fitnessThreshold;
         this.maxIterations = maxIterations;
+        this.mutationChance = mutationChance;
 
         Debug.Log("Cálculo do melhor tempo para realizar as etapas:");
         GenerateFirstPopulation();
@@ -40,6 +42,7 @@ public class GeneticSolverScript : MonoBehaviour
                 {
                     SelectBestChromossomes();
                     CrossOver();
+                    //Mutacao();
                 }
             }
             else
@@ -56,6 +59,7 @@ public class GeneticSolverScript : MonoBehaviour
                 {
                     SelectBestChromossomes();
                     CrossOver();
+                    //Mutacao();
                 }
             }
             else
@@ -65,7 +69,7 @@ public class GeneticSolverScript : MonoBehaviour
             }
         }
         bestTime = Utils.ReverseFitnessToTime(bestFitness);
-        Debug.Log("Fim");
+        Debug.Log("Fim (" + iterationNumber + " iterações)");
         Debug.Log("Melhor tempo: " + bestTime + " minutos");
         
         showBestChromossome();
@@ -115,6 +119,26 @@ public class GeneticSolverScript : MonoBehaviour
         Population = Survivors.ToList();
     }
 
+    
+    //Mutação
+    private void Mutacao()
+    // ----- Acho que está caindo em loop a mutação -----
+    {
+        if (Randomizer.Next(0, 100)/100 <= mutationChance) //5% de chance padrão
+        {
+            //Inverte a ordem
+            for (int i = 0; i < Population.Count(); i++)
+            {
+                for (int j = 0; j < Population[i].Steps.Count(); j++)
+                {
+                    (Population[i].Steps[j].chosenHobbits) = (Population[i].Steps[15-j].chosenHobbits);
+                }
+
+                iterationNumber++;
+            }
+        }
+    }
+    
 
     //Cross-over
     private void CrossOver()
@@ -128,9 +152,9 @@ public class GeneticSolverScript : MonoBehaviour
             //Caso haja um número ímpar de sobreviventes, adiciona mais um cromossomo
             if (maxAllowedSurvivors % 2 != 0)
             {
-                Chromossome ExtraChomossome = new Chromossome();
-                ExtraChomossome.GenerateRandomChromossome(Randomizer);
-                Survivors.Add(ExtraChomossome);
+                //Chromossome ExtraChomossome = new Chromossome();
+                //ExtraChomossome.GenerateRandomChromossome(Randomizer);
+                Survivors.RemoveAt(0);
             }
 
             //Divide os sobreviventes em duas metades
@@ -151,7 +175,7 @@ public class GeneticSolverScript : MonoBehaviour
                 {
                     if (j % 2 == 0)
                     {
-                        (Fathers[i].Steps[j], Mothers[i].Steps[j]) = (Mothers[i].Steps[j], Fathers[i].Steps[j]);
+                        (Fathers[i].Steps[j].chosenHobbits, Mothers[i].Steps[j].chosenHobbits) = (Mothers[i].Steps[j].chosenHobbits, Fathers[i].Steps[j].chosenHobbits);
                     }
                 }
 
