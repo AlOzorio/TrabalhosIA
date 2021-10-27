@@ -1,16 +1,51 @@
-﻿//Substituir por um arquivo CS para testar
-
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GeneticSolver;
 
 namespace Teste
 {
     class Program
     {
+        public static Chromossome bestChromossome;
+        private static System.Random Randomizer = new System.Random();
+        
         static void Main(string[] args)
         {
-            Chromossome c = new Chromossome();
-            Console.WriteLine(Utils.FitnessFunction(c));
+            int Iteracoes = 0;
+            double bestFitness = 0;
+
+            List<Chromossome> Population = new List<Chromossome>();
+            Console.WriteLine("\nCálculo da melhor tmepo para raelizar as etapas:\n");
+            
+            while (Iteracoes < 1000)
+            {
+                Chromossome c = new Chromossome(Randomizer);
+                if (Utils.isValidChromossome(c))
+                {
+                    Population.Add(c);
+                    Iteracoes++;
+                    if (Utils.FitnessFunction(c) > bestFitness)
+                    {
+                        bestFitness = Utils.FitnessFunction(c);
+                        bestChromossome = c;
+                        Console.WriteLine("Novo melhor tempo :" + 1/Utils.FitnessFunction(c)+" minutos");
+                    }
+                }
+            }
+            
+            Console.WriteLine("Fim\n\nMelhor tempo: "+1/bestFitness+" minutos\n");
+            
+            for (int i = 0; i < bestChromossome.Steps.Count(); i++)
+            {
+                Console.Write("Os hobbits da etapa " + bestChromossome.Steps[i].number + " foram: ");
+                for (int j = 0; j < bestChromossome.Steps[i].chosenHobbits.Count(); j++)
+                {
+                    Console.Write(bestChromossome.Steps[i].chosenHobbits[j].name + " ");
+                }
+
+                Console.WriteLine("");
+            }
         }
     }
 }

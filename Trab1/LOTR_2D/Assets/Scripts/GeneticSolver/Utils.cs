@@ -1,21 +1,16 @@
-using System;
-
 namespace GeneticSolver
 {
     public class Utils
     {
         public static double FitnessFunction(Chromossome c)
         {
-            double tempoTotal = 0;
-            double fitnessValue;
-            for (int i = 0; i < c.chromossome.Count; i++)
-            {
-                tempoTotal += c.chromossome[i].achievementTime;
-            }
-
-            fitnessValue = 1 / tempoTotal;
-            Console.WriteLine("Tempo total: ",tempoTotal);
+            double fitnessValue = 1 / c.totalAchievementTime;
             return fitnessValue;
+        }
+
+        public static bool isValidChromossome(Chromossome c)
+        {
+            return !double.IsPositiveInfinity(c.totalAchievementTime);
         }
     }
 }
