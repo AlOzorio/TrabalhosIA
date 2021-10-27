@@ -11,9 +11,9 @@ namespace GeneticSolver
     {
         private List<Hobbit> Hobbits = new List<Hobbit>();
         public List<Step> Steps = new List<Step>();
-        public double totalAchievementTime = 0;
+        public double totalAchievementTime = double.PositiveInfinity;
 
-        public Chromossome(System.Random Randomizer)
+        public Chromossome()
         {
             //Cria os hobbits
             Hobbits.Add((new Hobbit("Frodo")));
@@ -37,8 +37,11 @@ namespace GeneticSolver
             Steps.Add(new Step('E', 120));
             Steps.Add(new Step('F', 130));
             Steps.Add(new Step('G', 140));
-            Steps.Add(new Step('H', 150));            
+            Steps.Add(new Step('H', 150));        
+        }
 
+        public void GenerateRandomChromossome(System.Random Randomizer)
+        {
             for (int i = 0; i < Hobbits.Count(); i++)
             {
                 //Distribui os hobbits em todas as etapas de forma que nao se tenha o mesmo hobbit em mais de 10 etapas diferentes
@@ -56,42 +59,6 @@ namespace GeneticSolver
                 }
             }
             
-            /* --- Debugger para conferir número de cada hobbit em um cromossomo (APAGAR DEPOIS)---
-            
-            int cont_Frodo = 0;
-            int cont_Sam = 0;
-            int cont_Merry = 0;
-            int cont_Pippin = 0;
-
-            for (int i = 0; i < Steps.Count(); i++)
-            {
-                for (int j = 0; j < Steps[i].chosenHobbits.Count(); j++)
-                {
-                    if (Steps[i].chosenHobbits[j].name == "Frodo")
-                    {
-                        cont_Frodo++;
-                    }
-                    else if (Steps[i].chosenHobbits[j].name == "Sam")
-                    {
-                        cont_Sam++;
-                    }
-                    else if (Steps[i].chosenHobbits[j].name == "Merry")
-                    {
-                        cont_Merry++;
-                    }
-                    else if (Steps[i].chosenHobbits[j].name == "Pippin")
-                    {
-                        cont_Pippin++;
-                    }
-                }
-            } 
-            
-            Console.WriteLine("Numero de Frodo's: " + cont_Frodo);
-            Console.WriteLine("Numero de Sam's: " + cont_Sam);
-            Console.WriteLine("Numero de Merry's: " + cont_Merry);
-            Console.WriteLine("Numero de Pippin's: " + cont_Pippin);
-            
-            */
 
             for (int i = 0; i < Steps.Count(); i++)
             {
@@ -101,6 +68,7 @@ namespace GeneticSolver
 
         public void calculateAchievementTime()
         {
+            totalAchievementTime = 0;
             for (int i = 0; i < Steps.Count(); i++)
             {
                 float totalAgility = 0;

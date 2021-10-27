@@ -260,22 +260,22 @@ MonoBehaviour:
   - {x: 52, y: 52}
   color:
   - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
-  - {x: 255, y: 0, z: 0, w: 255}
+  - {x: 225, y: 0, z: 0, w: 255}
+  - {x: 195, y: 0, z: 0, w: 255}
+  - {x: 165, y: 0, z: 0, w: 255}
+  - {x: 135, y: 0, z: 0, w: 255}
+  - {x: 105, y: 0, z: 0, w: 255}
+  - {x: 75, y: 0, z: 0, w: 255}
+  - {x: 45, y: 0, z: 0, w: 255}
+  - {x: 15, y: 0, z: 0, w: 255}
+  - {x: 15, y: 0, z: 0, w: 255}
+  - {x: 45, y: 0, z: 0, w: 255}
+  - {x: 75, y: 0, z: 0, w: 255}
+  - {x: 105, y: 0, z: 0, w: 255}
+  - {x: 135, y: 0, z: 0, w: 255}
+  - {x: 165, y: 0, z: 0, w: 255}
+  - {x: 195, y: 0, z: 0, w: 255}
+  - {x: 225, y: 0, z: 0, w: 255}
 --- !u!4 &1723176585
 Transform:
   m_ObjectHideFlags: 0
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
-  waitTime: 0.5
+  waitTime: 2
   travelTime: 0
 --- !u!114 &1723176588
 MonoBehaviour:
@@ -346,3 +346,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28724060c5c76c144b33ced65611c7f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bestFitness: 0
+  bestTime: 0
