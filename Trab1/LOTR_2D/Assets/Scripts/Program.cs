@@ -10,7 +10,7 @@ public class Program : MonoBehaviour
     //Variáveis de configuração do algoritmo genético
     int maxPopulationSize = 1000;
     int maxAllowedSurvivors = 10;
-    double fitnessThreshold = 0.0024; //Máximo 0.0024..alguma coisa..
+    double fitnessThreshold = 0.0024; //Máximo 0.0024..alguma coisa.. (Menos que isso TRAVA O PROGRAMA)
     int maxIterations = 100000;
     string stopCondition = "maxIterations"; //ou "fitnessThreshold"
     System.Random Randomizer = new System.Random();
@@ -20,7 +20,7 @@ public class Program : MonoBehaviour
     {
         astar = GetComponent<Astar>();
         gss = GetComponent<GeneticSolverScript>();
-        //StartCoroutine(astar.ThereAndBackAgain());
+        StartCoroutine(astar.ThereAndBackAgain());
         gss.Solve(maxPopulationSize, maxAllowedSurvivors, Randomizer, stopCondition, maxIterations: maxIterations);
     }
 
