@@ -6,6 +6,9 @@ public class Astar : MonoBehaviour
 {
     public Grid grid;
     private int colorIndex;
+
+    [SerializeField] private float waitTime;
+    public int travelTime;
     
     private void Awake()
     {
@@ -19,9 +22,10 @@ public class Astar : MonoBehaviour
         List<Vector2> checkpoints = GetComponent<Types>().checkpoints;
         for(int i = 0; i < 17; i++)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(waitTime);
             FromSourceToDestiny(grid.nodes[(int)checkpoints[i][0], (int)checkpoints[i][1]], grid.nodes[(int)checkpoints[i + 1][0], (int)checkpoints[i + 1][1]]);
         }
+        GetComponent<Program>().Invoke("GetTime", 0);
     }
 
     private void FromSourceToDestiny(GridNode start, GridNode end)
@@ -96,6 +100,11 @@ public class Astar : MonoBehaviour
         for(int i = 0; i < fullPath.Count; i++)
         {
             fullPath[i].mapTile.GetComponent<SpriteRenderer>().color = GetComponent<Types>().color[colorIndex];
+
+            if(Types.tileTypeToInt.ContainsKey(fullPath[i].type))
+            {
+                travelTime += Types.tileTypeToInt[fullPath[i].type];
+            }
         }
 
         colorIndex++;
