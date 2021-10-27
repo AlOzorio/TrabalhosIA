@@ -20,6 +20,6 @@ public class Program : MonoBehaviour
     {
         gss.Solve();
         double totalTime = gss.bestTime + (double)astar.travelTime;
-        Debug.Log("Tempo total gasto na viagem: " + totalTime);
+        Debug.Log("Tempo total gasto na viagem: " + totalTime + " minutos");
     }
 }

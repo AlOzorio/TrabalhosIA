@@ -16,12 +16,12 @@ public class GeneticSolverScript : MonoBehaviour
         int Iteracoes = 0;
 
         List<Chromossome> Population = new List<Chromossome>();
-        Debug.Log("Cálculo da melhor tmepo para raelizar as etapas:");
+        Debug.Log("Cálculo do melhor tempo para realizar as etapas:");
         
         while (Iteracoes < 1000)
         {
             Chromossome c = new Chromossome(Randomizer);
-            if (Utils.isValidChromossome(c))
+            if (Utils.IsValidChromossome(c))
             {
                 Population.Add(c);
                 Iteracoes++;

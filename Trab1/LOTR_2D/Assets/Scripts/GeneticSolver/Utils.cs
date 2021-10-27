@@ -8,7 +8,7 @@ namespace GeneticSolver
             return fitnessValue;
         }
 
-        public static bool isValidChromossome(Chromossome c)
+        public static bool IsValidChromossome(Chromossome c)
         {
             return !double.IsPositiveInfinity(c.totalAchievementTime);
         }

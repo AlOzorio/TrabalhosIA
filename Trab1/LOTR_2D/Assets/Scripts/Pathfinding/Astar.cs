@@ -8,8 +8,8 @@ public class Astar : MonoBehaviour
     private int colorIndex;
 
     [SerializeField] private float waitTime;
-    public int travelTime;
-    
+    public int travelTime = 0;
+
     private void Awake()
     {
         colorIndex = 0;
@@ -19,12 +19,16 @@ public class Astar : MonoBehaviour
 
     public IEnumerator ThereAndBackAgain()
     {
+        Debug.Log("Calculando rota e tempo do trajeto:");
         List<Vector2> checkpoints = GetComponent<Types>().checkpoints;
         for(int i = 0; i < 17; i++)
         {
             yield return new WaitForSeconds(waitTime);
+            int previousTime = travelTime;
             FromSourceToDestiny(grid.nodes[(int)checkpoints[i][0], (int)checkpoints[i][1]], grid.nodes[(int)checkpoints[i + 1][0], (int)checkpoints[i + 1][1]]);
+            Debug.Log("Tempo até o " + (i+1) + "º checkpoint: " + (travelTime-previousTime) + " minutos");
         }
+        Debug.Log("Tempo dos percursos: " + travelTime + " minutos");
         GetComponent<Program>().Invoke("GetTime", 0);
     }
 
