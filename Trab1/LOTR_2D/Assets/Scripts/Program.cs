@@ -20,13 +20,21 @@ public class Program : MonoBehaviour
     {
         astar = GetComponent<Astar>();
         gss = GetComponent<GeneticSolverScript>();
-        StartCoroutine(astar.ThereAndBackAgain());
-        gss.Solve(maxPopulationSize, maxAllowedSurvivors, Randomizer, stopCondition, maxIterations: maxIterations);
+        GetPathfindingTime();
     }
 
-    public void GetTime()
+    public void GetPathfindingTime()
     {
-        gss.Solve(maxPopulationSize, maxAllowedSurvivors, Randomizer, stopCondition, fitnessThreshold, maxIterations);
+        StartCoroutine(astar.ThereAndBackAgain());
+    }
+
+    public void GetGeneticSolverTime()
+    {
+        StartCoroutine(gss.Solve(maxPopulationSize, maxAllowedSurvivors, Randomizer, stopCondition, fitnessThreshold, maxIterations));
+    }
+
+    public void ExibitTotalTime()
+    {
         double totalTime = gss.bestTime + (double)astar.travelTime;
         Debug.Log("Tempo total gasto na viagem: " + totalTime + " minutos");
     }

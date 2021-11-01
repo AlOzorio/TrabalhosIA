@@ -29,7 +29,7 @@ public class Astar : MonoBehaviour
             Debug.Log("Tempo até o " + (i+1) + "º checkpoint: " + (travelTime-previousTime) + " minutos");
         }
         Debug.Log("Tempo dos percursos: " + travelTime + " minutos");
-        GetComponent<Program>().Invoke("GetTime", 0);
+        GetComponent<Program>().Invoke("GetGeneticSolverTime", 0);
     }
 
     private void FromSourceToDestiny(GridNode start, GridNode end)

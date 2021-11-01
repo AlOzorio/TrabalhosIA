@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using GeneticSolver;
@@ -19,9 +20,10 @@ public class GeneticSolverScript : MonoBehaviour
     private int maxIterations;
     private int iterationNumber = 0;
     private float mutationChance;
+    private float waitTime = 1;
 
 
-    public void Solve(int maxPopulationSize, int maxAllowedSurvivors, System.Random Randomizer, string stopCondition, double fitnessThreshold = 0, int maxIterations = 0, float mutationChance = 0.05f)
+    public IEnumerator Solve(int maxPopulationSize, int maxAllowedSurvivors, System.Random Randomizer, string stopCondition, double fitnessThreshold = 0, int maxIterations = 0, float mutationChance = 0.05f)
     {
         this.maxPopulationSize = maxPopulationSize;
         this.maxAllowedSurvivors = maxAllowedSurvivors;
@@ -32,6 +34,7 @@ public class GeneticSolverScript : MonoBehaviour
         this.mutationChance = mutationChance;
 
         Debug.Log("Cálculo do melhor tempo para realizar as etapas:");
+        yield return new WaitForSeconds(waitTime);
         GenerateFirstPopulation();
 
         if (stopCondition == "fitnessThreshold")
@@ -71,7 +74,7 @@ public class GeneticSolverScript : MonoBehaviour
         bestTime = Utils.ReverseFitnessToTime(bestFitness);
         Debug.Log("Fim (" + iterationNumber + " iterações)");
         Debug.Log("Melhor tempo: " + bestTime + " minutos");
-        
+        GetComponent<Program>().Invoke("ExibitTotalTime", 0);
         showBestChromossome();
     }
 
