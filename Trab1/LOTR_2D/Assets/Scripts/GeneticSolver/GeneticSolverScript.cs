@@ -37,13 +37,13 @@ public class GeneticSolverScript : MonoBehaviour
         yield return new WaitForSeconds(LogWaitTime);
 
         //Validação dos parâmetros gerais
-        if (maxPopulationSize <= 0)
+        if (maxPopulationSize < 10)
         {
             Debug.Log("ERRO - Tamanho da população inválido");
             UnityEditor.EditorApplication.ExitPlaymode();
         }
 
-        if (maxAllowedSurvivors <= 0 || maxAllowedSurvivors >= maxPopulationSize)
+        if (maxAllowedSurvivors < 4 || maxAllowedSurvivors >= maxPopulationSize)
         {
             Debug.Log("ERRO - Tamanho da população de sobreviventes inválido");
             UnityEditor.EditorApplication.ExitPlaymode();
@@ -126,7 +126,7 @@ public class GeneticSolverScript : MonoBehaviour
 
     
     //Testa vários cromossomos até adicionar um cromossomo válido
-    public void addValidChromossome()
+    public void addValidChromossome(bool survivors = false)
     {
         Chromossome newChromossome = new Chromossome();
         while (!Utils.IsValidChromossome(newChromossome))
@@ -135,8 +135,14 @@ public class GeneticSolverScript : MonoBehaviour
             newChromossome.GenerateRandomChromossome(Randomizer);
             iterationNumber++;
         }
-        Population.Add(newChromossome);
-        CompareBestChromossome(newChromossome);
+
+        if (survivors == false)
+        {
+            Population.Add(newChromossome);
+            CompareBestChromossome(newChromossome);
+        }
+        else
+            Survivors.Add(newChromossome);
     }
     
 
@@ -171,31 +177,45 @@ public class GeneticSolverScript : MonoBehaviour
     
     //Mutação
     private void Mutation()
-    // ----- Acho que está caindo em loop a mutação -----
+    // ----- Mutação está criando cromossomos não válidos -----
     {
-        for (int i = 0; i < Population.Count(); i++)
-        {
-            if (Randomizer.Next(0, 100) / 100 <= mutationChance) //5% de chance padrão
+        if (mutationChance > 0) {
+            for (int i = 0; i < Population.Count(); i++)
             {
-                //Inverte a ordem
-                for (int j = 0; j < Population[i].Steps.Count(); j++)
+                if ((float) Randomizer.Next(0, 100) / 100 <= mutationChance) //5% de chance padrão
                 {
-                    (Population[i].Steps[j].chosenHobbits) = (Population[i].Steps[15-j].chosenHobbits);
-                }
-                
-                Population[i].calculateAchievementTime();
-                
-                //Adiciona o cromossomo mutado se for válido
-                if (Utils.IsValidChromossome(Population[i]))
+                    //Altera cromossomo
+                    Chromossome newChromossome = new Chromossome();
+                    while (!Utils.IsValidChromossome(newChromossome))
+                    {
+                        newChromossome.ClearChromossome();
+                        newChromossome.GenerateRandomChromossome(Randomizer);
+                        iterationNumber++;
+                    }
+                    Population[i] = newChromossome;
                     CompareBestChromossome(Population[i]);
-                
-                //Caso contrário adiciona-se um cromossomo válido substituto para manter o mesmo número da população
-                else
-                {
-                    Population.Remove(Population[i]);
-                    addValidChromossome();
+                    /*
+                    for (int j = 0; j < Population[i].Steps.Count()/2; j++)
+                    {
+                        (Population[i].Steps[j].chosenHobbits) = (Population[i].Steps[15 - j].chosenHobbits);
+                    }
+                    Population[i].calculateAchievementTime();
+
+                    //Adiciona o cromossomo mutado se for válido
+                    if (Utils.IsValidChromossome(Population[i]))
+                        CompareBestChromossome(Population[i]);
+                    
+
+                    //Caso contrário adiciona-se um cromossomo válido substituto para manter o mesmo número da população
+                    else
+                    {
+                        Population.Remove(Population[i]);
+                        addValidChromossome();
+                    }
+                    */
+
+                    iterationNumber++;
                 }
-                iterationNumber++;
             }
         }
     }
@@ -204,7 +224,6 @@ public class GeneticSolverScript : MonoBehaviour
     //Cross-over
     private void CrossOver()
     {
-        //---Depois multiplicar maxPopulationSize por um fator < 1 para sobrar espaço para a mutação---
         while (Population.Count() < maxPopulationSize)
         {
             List<Chromossome> Fathers = new List<Chromossome>();
@@ -212,7 +231,7 @@ public class GeneticSolverScript : MonoBehaviour
 
             //Caso haja um número ímpar de sobreviventes, adiciona um cromossomo válido
             if (maxAllowedSurvivors % 2 != 0)
-                addValidChromossome();
+                addValidChromossome(survivors: true);
 
             //Divide os sobreviventes em duas metades
             for (int i = 0; i < Survivors.Count(); i++)
