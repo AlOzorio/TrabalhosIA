@@ -59,10 +59,22 @@ namespace GeneticSolver
                 }
             }
             
-
             for (int i = 0; i < Steps.Count(); i++)
             {
                 calculateAchievementTime();
+            }
+        }
+
+        public void ClearChromossome()
+        {
+            for (int i = 0; i < Steps.Count(); i++)
+            {
+                Steps[i].chosenHobbits.Clear();
+            }
+
+            for (int i = 0; i < Hobbits.Count(); i++)
+            {
+                Hobbits[i].energyPoints = 10;
             }
         }
 
