@@ -215,10 +215,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1723176585}
-  - component: {fileID: 1723176587}
   - component: {fileID: 1723176586}
   - component: {fileID: 1723176588}
   - component: {fileID: 1723176584}
+  - component: {fileID: 1723176587}
   - component: {fileID: 1723176589}
   m_Layer: 0
   m_Name: Map
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
-  waitTime: 2
+  waitTime: 0.5
   travelTime: 0
 --- !u!114 &1723176588
 MonoBehaviour:
@@ -346,5 +346,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28724060c5c76c144b33ced65611c7f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bestFitness: 0
-  bestTime: 0
+  maxPopulationSize: 0
+  maxAllowedSurvivors: 0
+  stopCondition: fitnessThreshold
+  fitnessThreshold: 0
+  maxIterations: 0
+  maxWaitingTime: 0
+  mutationChance: 0

@@ -6,13 +6,6 @@ public class Program : MonoBehaviour
 {   
     private Astar astar;
     private GeneticSolverScript gss;
-    
-    //Variáveis de configuração do algoritmo genético
-    int maxPopulationSize = 1000;
-    int maxAllowedSurvivors = 10;
-    double fitnessThreshold = 0.0024; //Máximo 0.0024..alguma coisa.. (Menos que isso TRAVA O PROGRAMA)
-    int maxIterations = 100000;
-    string stopCondition = "maxIterations"; //ou "fitnessThreshold"
     System.Random Randomizer = new System.Random();
 
     // Start is called before the first frame update
@@ -30,12 +23,12 @@ public class Program : MonoBehaviour
 
     public void GetGeneticSolverTime()
     {
-        StartCoroutine(gss.Solve(maxPopulationSize, maxAllowedSurvivors, Randomizer, stopCondition, fitnessThreshold, maxIterations));
+        StartCoroutine(gss.Solve(Randomizer));
     }
 
     public void ExibitTotalTime()
     {
-        double totalTime = gss.bestTime + (double)astar.travelTime;
+        double totalTime = astar.GetTravelTime() + gss.GetBestTime();
         Debug.Log("Tempo total gasto na viagem: " + totalTime + " minutos");
     }
 }

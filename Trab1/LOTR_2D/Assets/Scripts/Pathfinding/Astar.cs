@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Astar : MonoBehaviour
 {
-    public Grid grid;
+    [HideInInspector] public Grid grid;
     private int colorIndex;
 
     [SerializeField] private float waitTime;
-    public int travelTime = 0;
+    private int travelTime = 0;
 
     private void Awake()
     {
@@ -120,5 +120,10 @@ public class Astar : MonoBehaviour
         int distY = Mathf.Abs(origin.y - destiny.y);
 
         return distX + distY;
+    }
+
+    public double GetTravelTime()
+    {
+        return (double) travelTime;
     }
 }

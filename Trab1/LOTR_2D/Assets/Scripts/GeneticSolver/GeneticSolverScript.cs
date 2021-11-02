@@ -1,76 +1,114 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using GeneticSolver;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Debug = UnityEngine.Debug;
 
 public class GeneticSolverScript : MonoBehaviour
 {
     List<Chromossome> Population = new List<Chromossome>();
     List<Chromossome> Survivors = new List<Chromossome>();
     public static Chromossome bestChromossome;
-    public double bestFitness = 0;
-    public double bestTime;
-    private int maxPopulationSize;
-    private int maxAllowedSurvivors;
+    private double bestFitness = 0;
+    private double bestTime = Double.PositiveInfinity;
     private System.Random Randomizer;
-    private string stopCondition;
-    private double fitnessThreshold;
-    private int maxIterations;
     private int iterationNumber = 0;
-    private float mutationChance;
-    private float waitTime = 1;
+    private float LogWaitTime = 1;
+    private Stopwatch chronometer = new Stopwatch();
+    
+    //Variáveis de configuração do algoritmo genético
+    [SerializeField] private int maxPopulationSize; //1000
+    [SerializeField] private int maxAllowedSurvivors; //10
+    [SerializeField] private string stopCondition; //"maxIterations" ou "fitnessThreshold"
+    [SerializeField] private double fitnessThreshold; //Máximo 0.0024..alguma coisa.. (Mais que isso TRAVA O PROGRAMA)
+    [SerializeField] private long maxWaitingTime; //20
+    [SerializeField] private int maxIterations; //100000
+    [SerializeField] private float mutationChance; //0.05f
+    
 
-
-    public IEnumerator Solve(int maxPopulationSize, int maxAllowedSurvivors, System.Random Randomizer, string stopCondition, double fitnessThreshold = 0, int maxIterations = 0, float mutationChance = 0.05f)
+    public IEnumerator Solve(System.Random Randomizer)
     {
-        this.maxPopulationSize = maxPopulationSize;
-        this.maxAllowedSurvivors = maxAllowedSurvivors;
         this.Randomizer = Randomizer;
-        this.stopCondition = stopCondition;
-        this.fitnessThreshold = fitnessThreshold;
-        this.maxIterations = maxIterations;
-        this.mutationChance = mutationChance;
-
         Debug.Log("Cálculo do melhor tempo para realizar as etapas:");
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(LogWaitTime);
+
+        //Validação dos parâmetros gerais
+        if (maxPopulationSize <= 0)
+        {
+            Debug.Log("ERRO - Tamanho da população inválido");
+            UnityEditor.EditorApplication.ExitPlaymode();
+        }
+
+        if (maxAllowedSurvivors <= 0 || maxAllowedSurvivors >= maxPopulationSize)
+        {
+            Debug.Log("ERRO - Tamanho da população de sobreviventes inválido");
+            UnityEditor.EditorApplication.ExitPlaymode();
+        }
+
+        if (mutationChance < 0 || mutationChance >= 1)
+        {
+            Debug.Log("ERRO - Chance de mutação inválida");
+            UnityEditor.EditorApplication.ExitPlaymode();
+        }
+            
+        chronometer.Start();
         GenerateFirstPopulation();
 
         if (stopCondition == "fitnessThreshold")
         {
-            if (fitnessThreshold != 0)
+            if (fitnessThreshold > 0 && maxWaitingTime > 0)
             {
                 while (bestFitness < fitnessThreshold)
                 {
-                    SelectBestChromossomes();
-                    CrossOver();
-                    //Mutacao();
+                    if (chronometer.ElapsedMilliseconds < maxWaitingTime * 1000)
+                    {
+                        SelectBestChromossomes();
+                        CrossOver();
+                        Mutation();
+                    }
+                    else
+                    {
+                        Debug.Log("Tempo máximo de " + maxWaitingTime + " segundos expirado");
+                        break;
+                    }
                 }
             }
             else
             {
-                Debug.Log("ERRO - Defina um limiar para a função fitness");
-                System.Environment.Exit(1);
+                if (fitnessThreshold <= 0)
+                    Debug.Log("ERRO - Defina um limiar para a função fitness válido");
+                if (maxWaitingTime <= 0)
+                    Debug.Log("ERRO - Defina um tempo máximo de expiração válido");
+                UnityEditor.EditorApplication.ExitPlaymode();
             }
         }
         else if (stopCondition == "maxIterations")
         {
-            if (maxIterations != 0)
+            if (maxIterations > 0)
             {
                 while (iterationNumber < maxIterations)
                 {
                     SelectBestChromossomes();
                     CrossOver();
-                    //Mutacao();
+                    Mutation();
                 }
             }
             else
             {
-                Debug.Log("ERRO - Defina um número máximo de iterações");
-                System.Environment.Exit(1);
+                Debug.Log("ERRO - Defina um número máximo de iterações válido");
+                UnityEditor.EditorApplication.ExitPlaymode();
             }
         }
+        else
+        {
+            Debug.Log("ERRO - Defina uma condição de parada válida");
+            UnityEditor.EditorApplication.ExitPlaymode();
+        }
+        chronometer.Stop();
         bestTime = Utils.ReverseFitnessToTime(bestFitness);
         Debug.Log("Fim (" + iterationNumber + " iterações)");
         Debug.Log("Melhor tempo: " + bestTime + " minutos");
@@ -101,8 +139,11 @@ public class GeneticSolverScript : MonoBehaviour
     {
         if (Utils.FitnessFunction(c) > bestFitness)
         {
+            chronometer.Stop();
+            chronometer.Start();
             bestFitness = Utils.FitnessFunction(c);
             bestChromossome = c;
+            //---Tentar printar novo melhor tempo "ao vivo"---
             Debug.Log("Novo melhor tempo: " + c.totalAchievementTime + " minutos");
         }
     }
@@ -117,14 +158,13 @@ public class GeneticSolverScript : MonoBehaviour
         {
             Survivors.Add(Population[i]);
         }
-        
         Population.Clear();
         Population = Survivors.ToList();
     }
 
     
     //Mutação
-    private void Mutacao()
+    private void Mutation()
     // ----- Acho que está caindo em loop a mutação -----
     {
         if (Randomizer.Next(0, 100)/100 <= mutationChance) //5% de chance padrão
@@ -219,5 +259,14 @@ public class GeneticSolverScript : MonoBehaviour
         }
     }
 
+    public double GetBestTime()
+    {
+        return bestTime;
+    }
+    
+    public double GetBestFitness()
+    {
+        return bestFitness;
+    }
     
 }
